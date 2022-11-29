@@ -16,8 +16,10 @@ namespace PIA_BackEnd.Entities
         [Range(1,54)]
         public int NumberOfWinners { get; set; }
         public List<Prizes> Prizes { get; set; }
-        public List<Participant> Participants { get; set; }
+        public List<Participant> Winners { get; set; }
         [Required]
         public int TicketPrice { get; set; }
+
+        public List<Raffle_Participant> Raffle_Participants{ get; set; }
     }
 }

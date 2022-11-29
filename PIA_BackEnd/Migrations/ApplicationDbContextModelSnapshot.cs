@@ -30,9 +30,6 @@ namespace PIA_BackEnd.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -49,7 +46,7 @@ namespace PIA_BackEnd.Migrations
 
                     b.HasIndex("RaffleId");
 
-                    b.ToTable("Participants");
+                    b.ToTable("Participants", (string)null);
                 });
 
             modelBuilder.Entity("PIA_BackEnd.Entities.Prizes", b =>
@@ -73,7 +70,7 @@ namespace PIA_BackEnd.Migrations
 
                     b.HasIndex("RaffleId");
 
-                    b.ToTable("Prizes");
+                    b.ToTable("Prizes", (string)null);
                 });
 
             modelBuilder.Entity("PIA_BackEnd.Entities.Raffle", b =>
@@ -100,7 +97,33 @@ namespace PIA_BackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rifas");
+                    b.ToTable("Rifas", (string)null);
+                });
+
+            modelBuilder.Entity("PIA_BackEnd.Entities.Raffle_Participant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RaffleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParticipantId");
+
+                    b.HasIndex("RaffleId");
+
+                    b.ToTable("Raffle_Participants", (string)null);
                 });
 
             modelBuilder.Entity("PIA_BackEnd.Entities.Participant", b =>
@@ -117,11 +140,37 @@ namespace PIA_BackEnd.Migrations
                         .HasForeignKey("RaffleId");
                 });
 
+            modelBuilder.Entity("PIA_BackEnd.Entities.Raffle_Participant", b =>
+                {
+                    b.HasOne("PIA_BackEnd.Entities.Participant", "Participant")
+                        .WithMany("Raffle_Participants")
+                        .HasForeignKey("ParticipantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PIA_BackEnd.Entities.Raffle", "Raffle")
+                        .WithMany("Raffle_Participants")
+                        .HasForeignKey("RaffleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Participant");
+
+                    b.Navigation("Raffle");
+                });
+
+            modelBuilder.Entity("PIA_BackEnd.Entities.Participant", b =>
+                {
+                    b.Navigation("Raffle_Participants");
+                });
+
             modelBuilder.Entity("PIA_BackEnd.Entities.Raffle", b =>
                 {
                     b.Navigation("Participants");
 
                     b.Navigation("Prizes");
+
+                    b.Navigation("Raffle_Participants");
                 });
 #pragma warning restore 612, 618
         }

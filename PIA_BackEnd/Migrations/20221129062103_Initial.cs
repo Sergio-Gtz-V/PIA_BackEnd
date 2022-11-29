@@ -33,7 +33,6 @@ namespace PIA_BackEnd.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CardId = table.Column<int>(type: "int", nullable: false),
                     RaffleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -66,6 +65,33 @@ namespace PIA_BackEnd.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Raffle_Participants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RaffleId = table.Column<int>(type: "int", nullable: false),
+                    CardId = table.Column<int>(type: "int", nullable: false),
+                    ParticipantId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Raffle_Participants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Raffle_Participants_Participants_ParticipantId",
+                        column: x => x.ParticipantId,
+                        principalTable: "Participants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Raffle_Participants_Rifas_RaffleId",
+                        column: x => x.RaffleId,
+                        principalTable: "Rifas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Participants_RaffleId",
                 table: "Participants",
@@ -75,15 +101,28 @@ namespace PIA_BackEnd.Migrations
                 name: "IX_Prizes_RaffleId",
                 table: "Prizes",
                 column: "RaffleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Raffle_Participants_ParticipantId",
+                table: "Raffle_Participants",
+                column: "ParticipantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Raffle_Participants_RaffleId",
+                table: "Raffle_Participants",
+                column: "RaffleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Participants");
+                name: "Prizes");
 
             migrationBuilder.DropTable(
-                name: "Prizes");
+                name: "Raffle_Participants");
+
+            migrationBuilder.DropTable(
+                name: "Participants");
 
             migrationBuilder.DropTable(
                 name: "Rifas");

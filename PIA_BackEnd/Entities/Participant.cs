@@ -9,12 +9,12 @@ namespace PIA_BackEnd.Entities
 
         public string Name { get; set; }
 
-        [PhoneValidation]
+        //[Phone]
         public string Phone { get; set; }
 
         public string Email { get; set; }
 
-        public int CardId { get; set; }
+        public List<Raffle_Participant> Raffle_Participants { get; set; }
 
     }
 }
