@@ -1,62 +1,62 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PIA_BackEnd.Entities;
 
 namespace PIA_BackEnd.Controllers
 {
     [ApiController]
-    [Route("/rifas")]
-    public class RaffleController : ControllerBase
+    [Route("/premios")]
+    public class PrizesController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly ILogger<RaffleController> logger;
-        public RaffleController(ApplicationDbContext context, ILogger<RaffleController> logger)
+        private readonly ILogger<PrizesController> logger;
+        public PrizesController(ApplicationDbContext context, ILogger<PrizesController> logger)
         {
             this.dbContext = context;
             this.logger = logger;
         }
 
         [HttpPost]
-        [ResponseCache(Duration = 10)]
-        public async Task<ActionResult> Post(Raffle raffle)
+        public async Task<ActionResult> Post(Prizes prize)
         {
-            dbContext.Add(raffle);
+            dbContext.Add(prize);
             await dbContext.SaveChangesAsync();
             return Ok();
         }
 
         [HttpGet("listado")]
-        public async Task<ActionResult<List<Raffle>>> Get()
+        public async Task<ActionResult<List<Prizes>>> Get()
         {
-            return await dbContext.Rifas.ToListAsync();
+            return await dbContext.Prizes.ToListAsync();
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(Raffle raffle, int id)
+        public async Task<ActionResult> Put(Prizes prize, int id)
         {
-            if (raffle.Id != id)
+            if (prize.Id != id)
             {
                 logger.LogError("Error de coincidencia de IDs");
-                return BadRequest("El id de la rifa no coincide con el establecido en la url.");
-                
+                return BadRequest("El id del premio no coincide con el establecido en la url.");
+
             }
 
-            dbContext.Update(raffle);
+            dbContext.Update(prize);
             await dbContext.SaveChangesAsync();
             return Ok();
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete( int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var exists = await dbContext.Rifas.AnyAsync(x => x.Id == id);
+            var exists = await dbContext.Prizes.AnyAsync(x => x.Id == id);
 
             if (!exists)
             {
                 return NotFound();
             }
 
-            dbContext.Remove(new Raffle { Id = id });
+            dbContext.Remove(new Prizes { Id = id });
             await dbContext.SaveChangesAsync();
             return Ok();
         }

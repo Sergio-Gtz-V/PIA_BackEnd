@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -23,7 +24,9 @@ namespace PIA_BackEnd
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
             services.AddEndpointsApiExplorer();
+            services.AddResponseCaching();
             services.AddSwaggerGen();
         }
 
@@ -39,6 +42,8 @@ namespace PIA_BackEnd
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseResponseCaching();
 
             app.UseAuthorization();
 
