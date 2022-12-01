@@ -1,9 +1,11 @@
 ﻿using PIA_BackEnd.Entities;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PIA_BackEnd
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -12,6 +14,8 @@ namespace PIA_BackEnd
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Raffle_Participant>()
                 .HasOne(r => r.Raffle)
                 .WithMany(rp => rp.Raffle_Participants)

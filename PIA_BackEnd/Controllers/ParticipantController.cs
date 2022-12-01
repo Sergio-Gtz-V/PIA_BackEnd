@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PIA_BackEnd.Entities;
 
@@ -6,6 +8,7 @@ namespace PIA_BackEnd.Controllers
 {
     [ApiController]
     [Route("/participantes")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Administrador")]
     public class ParticipantController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;

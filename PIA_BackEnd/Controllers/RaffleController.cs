@@ -1,19 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PIA_BackEnd.Entities;
+using AutoMapper;
+using PIA_BackEnd.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PIA_BackEnd.Controllers
 {
     [ApiController]
     [Route("/rifas")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Administrador")]
     public class RaffleController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
         private readonly ILogger<RaffleController> logger;
-        public RaffleController(ApplicationDbContext context, ILogger<RaffleController> logger)
+        private readonly IMapper mapper;
+        public RaffleController(ApplicationDbContext context, ILogger<RaffleController> logger, IMapper mapper)
         {
             this.dbContext = context;
             this.logger = logger;
+            this.mapper = mapper;   
         }
 
         [HttpPost]

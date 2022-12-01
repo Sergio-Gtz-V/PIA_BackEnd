@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PIA_BackEnd.Entities;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace PIA_BackEnd.Controllers
 {
@@ -11,10 +13,12 @@ namespace PIA_BackEnd.Controllers
     {
         private readonly ApplicationDbContext dbContext;
         private readonly ILogger<PrizesController> logger;
-        public PrizesController(ApplicationDbContext context, ILogger<PrizesController> logger)
+        private readonly IMapper mapper;
+        public PrizesController(ApplicationDbContext context, ILogger<PrizesController> logger, IMapper mapper)
         {
             this.dbContext = context;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
         [HttpPost]
